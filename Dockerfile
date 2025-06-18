@@ -45,6 +45,20 @@ RUN mkdir -p /var/www/html/storage/logs \
     && chown -R www-data:www-data /var/www/html/storage \
     && chmod -R 775 /var/www/html/storage
 
+# Create basic .env file if .env.example doesn't exist
+RUN if [ ! -f .env.example ]; then \
+    echo "APP_NAME=Laravel" > .env.example && \
+    echo "APP_ENV=production" >> .env.example && \
+    echo "APP_KEY=" >> .env.example && \
+    echo "APP_DEBUG=false" >> .env.example && \
+    echo "APP_URL=http://localhost" >> .env.example && \
+    echo "DB_CONNECTION=sqlite" >> .env.example && \
+    echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env.example && \
+    echo "CACHE_DRIVER=file" >> .env.example && \
+    echo "SESSION_DRIVER=file" >> .env.example && \
+    echo "QUEUE_DRIVER=sync" >> .env.example; \
+    fi
+
 # Copy environment file
 COPY .env.example .env
 
