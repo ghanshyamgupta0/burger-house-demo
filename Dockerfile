@@ -59,11 +59,12 @@ RUN if [ ! -f .env.example ]; then \
     echo "QUEUE_DRIVER=sync" >> .env.example; \
     fi
 
-# Copy environment file
-COPY .env.example .env
+# Copy environment file and convert line endings
+RUN cp .env.example .env && \
+    sed -i 's/\r$//' .env
 
 # Generate application key
-RUN php artisan key:generate
+RUN php artisan key:generate --force
 
 # Optimize Laravel
 RUN php artisan config:cache \
